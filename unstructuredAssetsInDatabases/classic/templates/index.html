@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>File Upload Demo</title>
+</head>
+<body>
+  <h1>Upload a File</h1>
+  <form action="{{ url_for('upload') }}" method="post" enctype="multipart/form-data">
+    <input type="file" name="file" required />
+    <input type="text" name="description" placeholder="Description" />
+    <button type="submit">Upload</button>
+  </form>
+
+  <h2>Previously Uploaded Files</h2>
+  <ul>
+    {% for file in files %}
+      <li>
+        <img src="{{ url_for('uploaded_file', filename=file.filename) }}"
+             alt=""
+             style="max-height: 100px; display: block; margin-bottom: 4px;" />
+        <p>{{ file.description or '(no description)' }}</p>
+      </li>
+    {% else %}
+      <li>No files uploaded yet.</li>
+    {% endfor %}
+  </ul>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Base64-in-DB Upload Demo</title>
+</head>
+<body>
+  <h1>Upload a File</h1>
+  <form action="{{ url_for('upload') }}" method="post" enctype="multipart/form-data">
+    <input type="file" name="file" required />
+    <input type="text" name="description" placeholder="Description" />
+    <button type="submit">Upload</button>
+  </form>
+
+  <h2>Previously Uploaded Files</h2>
+  <ul>
+    {% for f in files %}
+      <li style="margin-bottom:1em;">
+        <p><strong>{{ f.filename }}</strong> &mdash; {{ f.description or '(no desc)' }}</p>
+        {% if f.mimetype.startswith('image/') %}
+          <img src="data:{{ f.mimetype }};base64,{{ f.data }}"
+               alt="{{ f.filename }}"
+               style="max-height:150px; border:1px solid #ccc;" />
+        {% else %}
+          <a href="data:{{ f.mimetype }};base64,{{ f.data }}"
+             download="{{ f.filename }}">
+            Download {{ f.filename }}
+          </a>
+        {% endif %}
+      </li>
+    {% else %}
+      <li>No files yet.</li>
+    {% endfor %}
+  </ul>
+</body>
+</html>
